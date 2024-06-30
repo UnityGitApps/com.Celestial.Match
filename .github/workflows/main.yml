@@ -7,7 +7,7 @@ env:
   UNITY_EMAIL: "unitydatastorage@gmail.com"
   UNITY_PASSWORD: "qwerty12345Q"
   
-  APP_NAME: "com.Celestial.Match(0)"
+  APP_NAME: "com.Celestial.Match(0v2)"
   
   AndroidKeystorePass: "qwerty"
   AndroidKeyaliasPass: "qwerty"

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Infrastructure.Data;
 using UnityEngine;
 
@@ -64,5 +65,29 @@ namespace Infrastructure.Services
             
             return playerData;
         }
+        
+        #if UNITY_EDITOR
+        public static void UnlockAllLevels(int levelsCount)
+        {
+            LevelProgress levelProgress = new LevelProgress { LevelsProgress = new List<LevelProgressData>() };
+            
+            for (int i = 0; i < levelsCount; i++)
+                levelProgress.LevelsProgress.Add(new LevelProgressData(i + 1, 3));
+            
+            string progressJson = JsonUtility.ToJson(levelProgress);
+            PlayerPrefs.SetString(PrefsLevelsProgressKey, progressJson);
+            
+            PlayerPrefs.Save();
+        }
+
+        public static void ShowSavedProgress()
+        {
+            if (PlayerPrefs.HasKey(PrefsLevelsProgressKey))
+            {
+                string progressJson = PlayerPrefs.GetString(PrefsLevelsProgressKey);
+                Debug.Log(progressJson);
+            }
+        }
+        #endif
     }
 }

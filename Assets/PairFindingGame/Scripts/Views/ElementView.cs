@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Infrastructure.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,8 @@ namespace PairFindingGame
         [SerializeField] private GameObject Cover;
         [SerializeField] private Button Button;
         [SerializeField] private LayoutElement LayoutElement;
+
+        private ProgressionService _progressionService;
 
         private CancellationToken _cancellationToken;
         private bool _showedNow;
@@ -25,6 +28,7 @@ namespace PairFindingGame
 
         protected override void Initialize()
         {
+            _progressionService = ServiceLocator.GetService<ProgressionService>();
             _cancellationToken = this.GetCancellationTokenOnDestroy();
             Button.onClick.AddListener(OnClickElement);
             SetSize();
@@ -80,8 +84,8 @@ namespace PairFindingGame
 
         private async UniTask ShowOpenedChip(CancellationToken cancellationToken)
         {
-            float openedShowTime = _settings.GetSettings<PairFindingGameSettings>().OpenedShowTime;
-            await UniTask.WaitForSeconds(openedShowTime, cancellationToken: cancellationToken);
+            var showTime = _progressionService.ProgressiveShowTime();
+            await UniTask.WaitForSeconds(showTime, cancellationToken: cancellationToken);
         }
 
         public void CloseChip()

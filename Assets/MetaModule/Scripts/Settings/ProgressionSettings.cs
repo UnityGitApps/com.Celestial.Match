@@ -12,5 +12,7 @@ namespace Infrastructure.Settings
         public int ProgressiveLevelTime;
         public int TargetsCount;
         public int ProgressiveTargetsCount;
+        public float OpenedShowTime;
+        public float ProgressiveShowTime;
     }
 }

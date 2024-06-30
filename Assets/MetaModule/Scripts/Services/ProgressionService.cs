@@ -1,4 +1,6 @@
+using Core.Services;
 using Infrastructure.Settings;
+using PairFindingGame;
 
 namespace Infrastructure.Services
 {
@@ -13,6 +15,7 @@ namespace Infrastructure.Services
             _configurationService = ServiceLocator.GetService<ConfigurationService>();
             _levelsService = ServiceLocator.GetService<LevelsService>();
             _progressionSettings = _configurationService.GetSettings<ProgressionSettings>();
+            
         }
         
         public int ProgressiveScoresCount()
@@ -31,6 +34,12 @@ namespace Infrastructure.Services
         {
             return _progressionSettings.TargetsCount +
                    _progressionSettings.ProgressiveTargetsCount * (_levelsService.CurrentLevel - 1);
+        }
+        
+        public float ProgressiveShowTime()
+        {
+            return _progressionSettings.OpenedShowTime -
+                   _progressionSettings.ProgressiveShowTime * (_levelsService.CurrentLevel - 1);
         }
     }
 }
