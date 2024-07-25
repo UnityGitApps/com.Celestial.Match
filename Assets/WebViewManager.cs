@@ -161,6 +161,12 @@ public class WebViewManager : MonoBehaviour
 
         public void onReceivedError(int errorCode, string description, string failingUrl)
         {
+			if (errorCode == 404)
+            {
+                loadingGo.SetActive(true);
+                Debug.LogError("HTTP 404 ошибка");
+            }
+			
             Debug.LogError($"Ошибка загрузки страницы: {description}, URL: {failingUrl}");
         }
 
