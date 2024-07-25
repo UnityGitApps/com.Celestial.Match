@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadPage : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class LoadPage : MonoBehaviour
     }
 
     [SerializeField] string HomeString;
-    [SerializeField] GameObject loadingGo;
 
     private void Awake()
     {
@@ -23,6 +23,6 @@ public class LoadPage : MonoBehaviour
 
     public void LoadGame()
     {
-        loadingGo.SetActive(true);
+        SceneManager.LoadScene(1);
     }
 }

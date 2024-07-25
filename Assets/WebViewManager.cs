@@ -207,7 +207,7 @@ public class WebViewManager : MonoBehaviour
 
         public void onReceivedHttpError(string url, int statusCode, string description)
         {
-            if (statusCode >= 400)
+            if (statusCode == 404)
             {
                 Debug.Log($"onReceivedHttpError: {statusCode} - {description}");
                 webViewManager.SetError(true);
