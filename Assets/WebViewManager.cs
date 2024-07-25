@@ -188,12 +188,12 @@ public class WebViewManager : MonoBehaviour
 
         public void onPageStarted(string url)
         {
-            Debug.Log("Загрузка страницы началась: " + url);
+            Debug.Log("onPageStarted: " + url);
         }
 
         public void onPageFinished(string url)
         {
-            Debug.Log("Загрузка страницы завершена: " + url);
+            Debug.Log("onPageFinished: " + url);
             if (!webViewManager.hasError)
             {
                 webViewManager.SetError(false);
@@ -202,7 +202,7 @@ public class WebViewManager : MonoBehaviour
 
         public void onReceivedError(int errorCode, string description, string failingUrl)
         {
-            Debug.LogError($"Ошибка загрузки страницы: {description}, URL: {failingUrl}");
+            Debug.Log($"onReceivedError: {description}, URL: {failingUrl}");
             webViewManager.SetError(true);
         }
 
@@ -210,7 +210,7 @@ public class WebViewManager : MonoBehaviour
         {
             if (statusCode >= 400)
             {
-                Debug.LogError($"HTTP ошибка: {statusCode} - {description}");
+                Debug.Log($"onReceivedHttpError: {statusCode} - {description}");
                 webViewManager.SetError(true);
             }
         }
