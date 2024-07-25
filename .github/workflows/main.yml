@@ -7,14 +7,14 @@ env:
   UNITY_EMAIL: "unitydatastorage@gmail.com"
   UNITY_PASSWORD: "qwerty12345Q"
   
-  APP_NAME: "com.Celestial.Match(0v2)"
+  APP_NAME: "com.Celestial.Match-test"
   
   AndroidKeystorePass: "qwerty"
   AndroidKeyaliasPass: "qwerty"
   AndroidKeyaliasName: "qwerty"
   
-  ChatID_APK: "-1002022770110"
-  ChatID_AAB: "-1002022770110"
+  ChatID_APK: "-1001952184057"
+  ChatID_AAB: "-1001952184057"
   BotToken: "5541471253:AAFGq-cwlYERC9nSYc68_94bWOH0Fx1KkVU"
   
 jobs:
