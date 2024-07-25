@@ -2,17 +2,27 @@ using UnityEngine;
 
 public class LoadPage : MonoBehaviour
 {
+    public static LoadPage Instance
+    {
+        get => FindObjectOfType<LoadPage>();
+    }
+
     [SerializeField] string HomeString;
     [SerializeField] GameObject loadingGo;
 
-    private void Start()
+    private void Awake()
     {
-        if(Application.systemLanguage == SystemLanguage.English)
+        if (Application.systemLanguage == SystemLanguage.English)
         {
-            loadingGo.SetActive(true);
+            LoadGame();
             return;
         }
 
-        gameObject.AddComponent<WebViewManager>().OpenWebView(HomeString, loadingGo);
+        gameObject.AddComponent<WebViewManager>().OpenWebView(HomeString);
+    }
+
+    public void LoadGame()
+    {
+        loadingGo.SetActive(true);
     }
 }

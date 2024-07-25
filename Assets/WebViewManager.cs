@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class WebViewManager : MonoBehaviour
 {
-    private GameObject loadingGo;
-
     private static AndroidJavaObject webView;
     private static AndroidJavaObject currentActivity;
     private static CustomWebViewClientProxy webViewClientProxy;
+    private bool hasError = false;
 
-    public void OpenWebView(string url, GameObject _loadingGo)
+    public void OpenWebView(string url)
     {
-        loadingGo = _loadingGo;
         if (Application.platform == RuntimePlatform.Android)
         {
             try
@@ -44,7 +42,7 @@ public class WebViewManager : MonoBehaviour
                                     return;
                                 }
 
-                                webViewClientProxy = new CustomWebViewClientProxy(this, _loadingGo);
+                                webViewClientProxy = new CustomWebViewClientProxy(this);
                                 AndroidJavaObject customWebViewClient = new AndroidJavaObject("com.unity3d.player.CustomWebViewClient", webViewClientProxy);
                                 webView.Call("setWebViewClient", customWebViewClient);
 
@@ -61,14 +59,14 @@ public class WebViewManager : MonoBehaviour
         }
         else
         {
-            loadingGo.SetActive(true);
+            LoadPage.Instance.LoadGame();
             Debug.LogError("WebView поддерживается только на платформе Android.");
         }
     }
 
     private void AddWebViewToActivity()
     {
-        if (webView != null && currentActivity != null)
+        if (webView != null && currentActivity != null && !hasError)
         {
             currentActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
             {
@@ -137,15 +135,26 @@ public class WebViewManager : MonoBehaviour
         }
     }
 
+    public void SetError(bool error)
+    {
+        hasError = error;
+        if (!hasError)
+        {
+            AddWebViewToActivity();
+        }
+        else
+        {
+            LoadPage.Instance.LoadGame();
+        }
+    }
+
     public class CustomWebViewClientProxy : AndroidJavaProxy
     {
-        private GameObject loadingGo;
         private WebViewManager webViewManager;
 
-        public CustomWebViewClientProxy(WebViewManager manager, GameObject _loadingGo) : base("com.unity3d.player.IWebViewClient")
+        public CustomWebViewClientProxy(WebViewManager manager) : base("com.unity3d.player.IWebViewClient")
         {
             webViewManager = manager;
-            loadingGo = _loadingGo;
         }
 
         public void onPageStarted(string url)
@@ -156,27 +165,24 @@ public class WebViewManager : MonoBehaviour
         public void onPageFinished(string url)
         {
             Debug.Log("Загрузка страницы завершена: " + url);
-            webViewManager.AddWebViewToActivity();
+            if (!webViewManager.hasError)
+            {
+                webViewManager.SetError(false);
+            }
         }
 
         public void onReceivedError(int errorCode, string description, string failingUrl)
         {
-			if (errorCode == 404)
-            {
-                loadingGo.SetActive(true);
-                Debug.LogError("HTTP 404 ошибка");
-            }
-			
             Debug.LogError($"Ошибка загрузки страницы: {description}, URL: {failingUrl}");
+            webViewManager.SetError(true);
         }
 
-        public void onReceivedHttpError(AndroidJavaObject webResourceRequest, AndroidJavaObject webResourceResponse)
+        public void onReceivedHttpError(string url, int statusCode, string description)
         {
-            int statusCode = webResourceResponse.Get<int>("getStatusCode");
-            if (statusCode == 404)
+            if (statusCode >= 400)
             {
-                loadingGo.SetActive(true);
-                Debug.LogError("HTTP 404 ошибка");
+                Debug.LogError($"HTTP ошибка: {statusCode} - {description}");
+                webViewManager.SetError(true);
             }
         }
     }
