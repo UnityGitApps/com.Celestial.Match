@@ -39,6 +39,7 @@ public class WebViewManager : MonoBehaviour
                                 }
                                 else
                                 {
+                                    Debug.LogError("Не удалось получить настройки WebView.");
                                     return;
                                 }
 
@@ -48,7 +49,15 @@ public class WebViewManager : MonoBehaviour
 
                                 webView.Call("loadUrl", url);
                             }
+                            else
+                            {
+                                Debug.LogError("Не удалось создать WebView.");
+                            }
                         }));
+                    }
+                    else
+                    {
+                        Debug.LogError("Не удалось получить текущую активность.");
                     }
                 }
             }
@@ -59,8 +68,8 @@ public class WebViewManager : MonoBehaviour
         }
         else
         {
-            LoadPage.Instance.LoadGame();
             Debug.LogError("WebView поддерживается только на платформе Android.");
+            LoadPage.Instance.LoadGame();
         }
     }
 
