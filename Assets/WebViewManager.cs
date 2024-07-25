@@ -153,7 +153,27 @@ public class WebViewManager : MonoBehaviour
         }
         else
         {
+            RemoveWebView();
             LoadPage.Instance.LoadGame();
+        }
+    }
+
+    private void RemoveWebView()
+    {
+        if (webView != null && currentActivity != null)
+        {
+            currentActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+            {
+                using (AndroidJavaClass r = new AndroidJavaClass("android.R$id"))
+                {
+                    int contentViewId = r.GetStatic<int>("content");
+                    AndroidJavaObject contentView = currentActivity.Call<AndroidJavaObject>("findViewById", contentViewId);
+                    if (contentView != null)
+                    {
+                        contentView.Call("removeView", webView);
+                    }
+                }
+            }));
         }
     }
 
