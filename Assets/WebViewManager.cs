@@ -154,7 +154,6 @@ public class WebViewManager : MonoBehaviour
         else
         {
             RemoveWebView();
-            LoadPage.Instance.LoadGame();
         }
     }
 
@@ -203,7 +202,7 @@ public class WebViewManager : MonoBehaviour
         public void onReceivedError(int errorCode, string description, string failingUrl)
         {
             Debug.Log($"onReceivedError: {description}, URL: {failingUrl}");
-            webViewManager.SetError(true);
+            //webViewManager.SetError(true);
         }
 
         public void onReceivedHttpError(string url, int statusCode, string description)
@@ -212,6 +211,7 @@ public class WebViewManager : MonoBehaviour
             {
                 Debug.Log($"onReceivedHttpError: {statusCode} - {description}");
                 webViewManager.SetError(true);
+                LoadPage.Instance.LoadGame();
             }
         }
     }
